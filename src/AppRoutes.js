@@ -2,11 +2,11 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import SearchView from '@modules/search/views/SearchView';
-import MapView from '@modules/map/views/MapView';
+import MapsView from '@modules/map/views/MapsView';
 
 const AppStack = createStackNavigator(
   {
-    Map: { screen: MapView },
+    Map: { screen: MapsView },
     Search: { screen: SearchView },
   },
   {

@@ -14,8 +14,6 @@ type BarProps = {
 const Bar = ({ dispatch, navigation }: BarProps) => {
   const activeTab = useSelector(getActiveTab);
 
-  console.log(activeTab);
-
   const handleChangeTab = (tabName) => {
     const route = tabName === TABS.MAP ? 'Map' : 'Search';
   
