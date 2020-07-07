@@ -1,0 +1,9 @@
+export const STATE_KEY = 'search';
+
+const SearchReducer = (state = {}, action) => {
+  switch (action.type) {
+    default: { return state; }
+  }
+};
+
+export default SearchReducer;
