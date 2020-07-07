@@ -1,18 +1,33 @@
+// @flow
 import React from 'react';
 import styled from 'styled-components';
-
+import { useDispatch } from 'react-redux';
 import { StatusBar, SafeAreaView } from 'react-native';
 
-const MapView = () => (
-  <>
-    <StatusBar barStyle="dark-content" />
-    <SafeAreaView>
-      <Screen>
-        <Text>Hello</Text>
-      </Screen>
-    </SafeAreaView>
-  </>
-);
+import Bar from '@components/Bar';
+
+type MapViewProps = {
+  navigation: Object,
+}
+
+const MapView = ({ navigation }: MapViewProps) => {
+  const dispatch = useDispatch();
+
+  return (
+    <>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView>
+        <Screen>
+          <Text>Hello</Text>
+          <Bar
+            navigation={navigation}
+            dispatch={dispatch}
+          />
+        </Screen>
+      </SafeAreaView>
+    </>
+  )
+  };
 
 const Screen = styled.View`
   width: 100%;
@@ -24,7 +39,7 @@ const Screen = styled.View`
 const Text = styled.Text`
   width: 100%;
   text-align: center;
-  color: red;
+  color: blue;
 `;
 
 export default MapView;
