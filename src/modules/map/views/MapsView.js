@@ -1,15 +1,18 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { StatusBar, SafeAreaView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as R from 'ramda';
+import axios from 'axios';
 
 import Bar from '@components/Bar';
+import { setSearchText } from '@modules/search/SearchActions';
 
+import MarkerCallout from '../components/MarkerCallout';
 import { fetchLocationAndForecast } from '../MapActions';
-import { getLocationNameAndTemp } from '../MapReducer';
+
 
 type MapViewProps = {
   navigation: Object,
@@ -17,12 +20,16 @@ type MapViewProps = {
 
 const MapsView = ({ navigation }: MapViewProps) => {
   const dispatch = useDispatch();
+  const marker = useRef(null);
   const [markerCoordinates, setMarkerCoordinates] = useState(null);
-  const { locationName, currentTemp } = useSelector(getLocationNameAndTemp);
 
-  console.log(locationName, currentTemp);
+  const hideCallout = () => {
+    if (marker.current) marker.current.hideCallout();
+  };
 
-  const handleLongPress = ({ coordinate }) => {
+  const handleLongMapPress = ({ coordinate }) => {
+    hideCallout();
+  
     setMarkerCoordinates(coordinate);
 
     const coordinates = R.compose(
@@ -32,10 +39,16 @@ const MapsView = ({ navigation }: MapViewProps) => {
       R.values
     )(coordinate);
 
-    console.log(coordinates);
-
     dispatch(fetchLocationAndForecast(coordinates));
+
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&location_type=ROOFTOP&result_type=administrative_area_level_1&key=AIzaSyBhjV8h-2MjxCGn8VSqE6Bj4yjgYDrhKEk`)
+      .then(res => console.log(res));
   };
+
+  const handleCalloutPress = (locationName) => {
+    dispatch(setSearchText({ text: locationName }));
+    navigation.navigate('Search');
+  }
 
   return (
     <>
@@ -43,20 +56,22 @@ const MapsView = ({ navigation }: MapViewProps) => {
       <SafeAreaView>
         <Screen>
           <Maps
+            onPress={hideCallout}
             initialRegion={{
               latitude: 49.0139,
               longitude: 31.2858,
               latitudeDelta: 20,
               longitudeDelta: 9,
             }}
-            showsUserLocation
-            onLongPress={(e) => handleLongPress(e.nativeEvent)}
+            onLongPress={(e) => handleLongMapPress(e.nativeEvent)}
           >
             {markerCoordinates && (
               <Marker
-                title="Test marker"
+                ref={marker}
                 coordinate={markerCoordinates}
-              />)}
+              >
+                <MarkerCallout onCalloutPress={handleCalloutPress} />
+              </Marker>)}
           </Maps>
           <Bar
             navigation={navigation}

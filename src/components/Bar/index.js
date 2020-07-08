@@ -46,6 +46,7 @@ const Wrapper = styled.View`
   min-height: 40px;
   position: absolute;
   bottom: 0;
+  z-index: 6;
 `;
 
 const Button = styled.TouchableOpacity`

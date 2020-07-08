@@ -96,6 +96,7 @@ rules:
   react/jsx-fragments: off
   react/state-in-constructor: off
   react/jsx-wrap-multilines: off
+  react/prop-types: off
   # React Native
   react-native/no-inline-styles: off
   react-native/no-raw-text: off

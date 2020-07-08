@@ -9,8 +9,22 @@ export const TABS = {
   SEARCH: 'search',
 };
 
+export const SPEED_UNITS = {
+  KPH: 'kph',
+  MPH: 'mph',
+}
+
+export const TEMP_UNITS = {
+  C: 'c',
+  F: 'f',
+};
+
 const initState = {
   activeTab: 'map',
+  filters: {
+    speed: 'kph',
+    temp: 'c',
+  },
 }
 
 const AppReducer = (state = initState, action) => {
@@ -27,5 +41,7 @@ const AppReducer = (state = initState, action) => {
 };
 
 export const getActiveTab = (state) => path([STATE_KEY, 'activeTab'], state);
+
+export const getFilters = state => path([STATE_KEY, 'filters'], state);
 
 export default AppReducer;

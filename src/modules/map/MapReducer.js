@@ -4,8 +4,11 @@ import { FETCH_LOCATION_AND_FORECAST } from './MapActions';
 export const STATE_KEY = 'map';
 
 const initState = {
-  locationName: null,
-  currentTemp: null,
+  location: {
+    name: null,
+    country: null,
+  },
+  currentWeather: null,
   forecasts: null,
 }
 
@@ -18,13 +21,16 @@ const MapReducer = (state = initState, action) => {
 
       const locationName = R.path(['location', 'name'], data);
       const country = R.path(['location', 'country'], data);
-      const currentTemp = R.path(['current', 'temp_c'], data);
+      const currentWeather = R.prop('current', data);
       const forecasts = R.path(['forecast', 'forecastday'], data);
 
       return {
         ...state,
-        locationName: `${locationName}, ${country}`,
-        currentTemp,
+        location: {
+          name: locationName,
+          country,
+        },
+        currentWeather,
         forecasts,
       };
     }
@@ -32,9 +38,11 @@ const MapReducer = (state = initState, action) => {
   }
 };
 
-export const getLocationNameAndTemp = (state) => R.compose(
-  R.pick(['locationName', 'currentTemp']),
+export const getCurrentInfo = (state) => R.compose(
+  R.pick(['location', 'currentWeather']),
   R.prop(STATE_KEY)
 )(state);
+
+export const getForecasts = state => R.pathOr([], [STATE_KEY, 'forecasts'], state);
 
 export default MapReducer;
