@@ -14,14 +14,8 @@ const initState = {
 
 const MapReducer = (state = initState, action) => {
   switch (action.type) {
-    case FETCH_CURRENT_WEATHER: {
-      console.log('here');
-      return state;
-    }
     case SET_LOCATION: {
       const location = R.prop('payload', action);
-
-      console.log(location);
 
       return {
         ...state,
@@ -29,16 +23,19 @@ const MapReducer = (state = initState, action) => {
       }
     }
     case `${FETCH_CURRENT_WEATHER}_SUCCESS`: {
-      const data = R.path(['payload', 'data'], action);
+      const currentWeather = R.path(['payload', 'data'], action);
 
-      console.log(data);
+      console.log(JSON.stringify(currentWeather, null, 2));
 
-      return state;
+      return {
+        ...state,
+        currentWeather,
+      };
     }
-    case `${FETCH_CURRENT_WEATHER}_FAIL`: {
-      console.log(action);
-      return state;
-    }
+    // case `${FETCH_CURRENT_WEATHER}_FAIL`: {
+    //   console.log(action);
+    //   return state;
+    // }
     default: { return state; }
   }
 };

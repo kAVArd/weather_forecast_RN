@@ -9,22 +9,15 @@ export const TABS = {
   SEARCH: 'search',
 };
 
-export const SPEED_UNITS = {
-  KPH: 'kph',
-  MPH: 'mph',
+// unit types by open weather
+export const TYPES = {
+  METRIC: 'metric',
+  IMPERIAL: 'imperial',
 }
-
-export const TEMP_UNITS = {
-  C: 'c',
-  F: 'f',
-};
 
 const initState = {
   activeTab: 'map',
-  filters: {
-    speed: 'kph',
-    temp: 'c',
-  },
+  type: TYPES.METRIC,
 }
 
 const AppReducer = (state = initState, action) => {
@@ -42,6 +35,6 @@ const AppReducer = (state = initState, action) => {
 
 export const getActiveTab = (state) => path([STATE_KEY, 'activeTab'], state);
 
-export const getFilters = state => path([STATE_KEY, 'filters'], state);
+export const getUnitsType = state => path([STATE_KEY, 'type'], state);
 
 export default AppReducer;

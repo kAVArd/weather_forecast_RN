@@ -1,67 +1,71 @@
-import React from 'react';
-import * as R from 'ramda';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
-import moment from 'moment';
 
-import { getForecasts } from '@modules/map/MapReducer';
-import { getFilters, TEMP_UNITS, SPEED_UNITS } from '@modules/app/AppReducer';
+import { getForecasts, getIsLoading } from '@modules/search/SearchReducer';
+import { getUnitsType, TYPES } from '@modules/app/AppReducer';
+
 import Forecast from './Forecast';
 
 const Forecasts = () => {
-  const forecasts = useSelector(getForecasts);
-  const filters = useSelector(getFilters);
+  const storeForecasts = useSelector(getForecasts);
+  const unitsType = useSelector(getUnitsType);
+  const isLoading = useSelector(getIsLoading);
 
-  const filteredForecasts = forecasts.map(item => {
-    const icon = `http:${R.path(['day', 'condition', 'icon'], item)}`;
+  const [forecasts, setForecasts] = useState([]);
 
-    const date = R.compose(
-      (d) => moment(d).format('DD.MM'),
-      R.prop('date')
-    )(item);
+  const formateForecasts = (_forecasts, _unitsType) => {
+    const celsius = '°C';
+    const fahrenheit = '°F';
 
-    const tempFilter = R.prop('temp', filters);
-    const speedFilter = R.prop('speed', filters);
+    const getUVLevel = (uv) => {
+      if (uv >= 1 && uv < 3) return 'Low';
+      if (uv >= 3 && uv < 6) return 'Moderate';
+      if (uv >= 6 && uv < 8) return 'Hight';
+      if (uv >= 8 && uv < 11) return 'Very High';
+      if (uv >= 11) return 'Extreme';
 
-    const temp = R.path(['day', `avgtemp_${tempFilter}`], item);
+      return 'Normal';
+    };
 
-    const minTemp = R.path(['day', `mintemp_${tempFilter}`], item);
-    const maxTemp = R.path(['day', `maxtemp_${tempFilter}`], item);
+    const formattedForecasts = _forecasts.map((item) => {
+      item.temp += _unitsType === TYPES.METRIC ? celsius : fahrenheit;
+      item.feelsLike += _unitsType === TYPES.METRIC ? celsius : fahrenheit;
+      item.humidity += '%';
+      item.windSpeed += _unitsType === TYPES.METRIC ? ' mps' : ' mph';
+      item.uv = getUVLevel(item.uv);
+      return item;
+    });
 
-    const rainChance = R.path(['day', 'daily_chance_of_rain'], item);
+    return formattedForecasts;
+  }
 
-    const windSpeed = R.path(['day', `maxwind_${speedFilter}`], item);
-
-
-    const uv = R.path(['day', 'uv'], item);
-  
-    return {
-      icon,
-      date,
-      temp: `${Math.round(temp)}°${tempFilter.toUpperCase()}`,
-      minTemp,
-      maxTemp,
-      rainChance,
-      windSpeed,
-      uv,
+  useEffect(() => {
+    if (!isLoading) {
+      setForecasts(formateForecasts(storeForecasts, unitsType));
     }
-  })
+  }, [unitsType, storeForecasts, isLoading]);
 
   const keyExtractor = item => item.date;
 
   const renderItem = ({ item }) => <Forecast item={item} />;
 
+  if (isLoading) {
+    return null;
+  }
+
   return (
     <Wrapper>
       <FlatList
-        data={filteredForecasts}
+        data={forecasts}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         contentContainerStyle={{
           flexGrow: 1,
           paddingTop: '50%',
           paddingHorizontal: '5%',
+          paddingBottom: '10%',
         }}
       />
     </Wrapper>

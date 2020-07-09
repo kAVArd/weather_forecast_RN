@@ -4,11 +4,8 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { StatusBar, SafeAreaView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import * as R from 'ramda';
-import axios from 'axios';
 
 import Bar from '@components/Bar';
-import { setSearchText } from '@modules/search/SearchActions';
 import GoogleGeolocation from '@services/googleGeolocation';
 
 import MarkerCallout from '../components/MarkerCallout';
@@ -43,8 +40,10 @@ const MapsView = ({ navigation }: MapViewProps) => {
   };
 
   const handleCalloutPress = (locationName) => {
-    dispatch(setSearchText({ text: locationName }));
-    navigation.navigate('Search');
+    navigation.navigate('Search', {
+      locationName,
+      coordinates: markerCoordinates,
+    });
   }
 
   return (

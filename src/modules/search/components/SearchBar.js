@@ -1,21 +1,23 @@
+// @flow
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_API_KEY } from 'react-native-dotenv';
 
-import { getSearchText } from '../SearchReducer';
+type SearchBarProps = {
+  locationName: string,
+}
 
-const SearchBar = () => {
+const SearchBar = ({ locationName }: SearchBarProps) => {
   const dispatch = useDispatch();
   const input = useRef(null);
-  const searchText = useSelector(getSearchText);
 
   useEffect(() => {
-    if (input.current && searchText) {
-      input.current.setAddressText(searchText);
+    if (input.current && locationName) {
+      input.current.setAddressText(locationName);
     }
-  }, [searchText]);
+  }, [locationName]);
 
   return (
     <Wrapper>

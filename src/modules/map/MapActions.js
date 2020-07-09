@@ -9,7 +9,7 @@ export const fetchCurrentWeather = ({ latitude, longitude }) => ({
   type: FETCH_CURRENT_WEATHER,
   payload: {
     request: {
-      url: `onecall?appid=${OPEN_WEATHER_API_KEY}&exclude=hourly,daily,minutely&lat=${latitude.toFixed(3)}&lon=${longitude.toFixed(3)}`,
+      url: `onecall?appid=${OPEN_WEATHER_API_KEY}&exclude=hourly,daily,minutely&lat=${latitude}&lon=${longitude}`,
     },
   },
 });

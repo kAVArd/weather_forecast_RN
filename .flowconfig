@@ -39,6 +39,13 @@ munge_underscores=true
 module.name_mapper='^react-native/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/react-native/\1'
 module.name_mapper='^@?[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> '<PROJECT_ROOT>/node_modules/react-native/Libraries/Image/RelativeImageStub'
 
+module.name_mapper='^@modules\(.*\)$' -> '<PROJECT_ROOT>/src/modules\1'
+module.name_mapper='^@components\(.*\)$' -> '<PROJECT_ROOT>/src/components\1'
+module.name_mapper='^@config\(.*\)$' -> '<PROJECT_ROOT>/src/config\1'
+module.name_mapper='^@store\(.*\)$' -> '<PROJECT_ROOT>/src/store\1'
+module.name_mapper='^@services\(.*\)$' -> '<PROJECT_ROOT>/src/services\1'
+module.name_mapper='^@models\(.*\)$' -> '<PROJECT_ROOT>/src/models\1'
+
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe
 suppress_type=$FlowFixMeProps
@@ -71,4 +78,4 @@ untyped-import
 untyped-type-import
 
 [version]
-^0.113.0
+^0.107.0
