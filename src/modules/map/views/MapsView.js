@@ -9,9 +9,10 @@ import axios from 'axios';
 
 import Bar from '@components/Bar';
 import { setSearchText } from '@modules/search/SearchActions';
+import GoogleGeolocation from '@services/googleGeolocation';
 
 import MarkerCallout from '../components/MarkerCallout';
-import { fetchLocationAndForecast } from '../MapActions';
+import { fetchCurrentWeather, setLocation } from '../MapActions';
 
 
 type MapViewProps = {
@@ -32,17 +33,13 @@ const MapsView = ({ navigation }: MapViewProps) => {
   
     setMarkerCoordinates(coordinate);
 
-    const coordinates = R.compose(
-      R.join(','),
-      R.map(x => x.toFixed(4)),
-      R.reverse,
-      R.values
-    )(coordinate);
+    const { latitude, longitude } = coordinate;
 
-    dispatch(fetchLocationAndForecast(coordinates));
+    dispatch(fetchCurrentWeather(coordinate));
 
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&location_type=ROOFTOP&result_type=administrative_area_level_1&key=AIzaSyBhjV8h-2MjxCGn8VSqE6Bj4yjgYDrhKEk`)
-      .then(res => console.log(res));
+    GoogleGeolocation.findLocationName(latitude, longitude).then(res => {
+      dispatch(setLocation(res));
+    });
   };
 
   const handleCalloutPress = (locationName) => {

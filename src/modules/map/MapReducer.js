@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { FETCH_LOCATION_AND_FORECAST } from './MapActions';
+import { FETCH_CURRENT_WEATHER, SET_LOCATION } from './MapActions';
 
 export const STATE_KEY = 'map';
 
@@ -14,25 +14,30 @@ const initState = {
 
 const MapReducer = (state = initState, action) => {
   switch (action.type) {
-    case `${FETCH_LOCATION_AND_FORECAST}_SUCCESS`: {
+    case FETCH_CURRENT_WEATHER: {
+      console.log('here');
+      return state;
+    }
+    case SET_LOCATION: {
+      const location = R.prop('payload', action);
+
+      console.log(location);
+
+      return {
+        ...state,
+        location,
+      }
+    }
+    case `${FETCH_CURRENT_WEATHER}_SUCCESS`: {
       const data = R.path(['payload', 'data'], action);
 
       console.log(data);
 
-      const locationName = R.path(['location', 'name'], data);
-      const country = R.path(['location', 'country'], data);
-      const currentWeather = R.prop('current', data);
-      const forecasts = R.path(['forecast', 'forecastday'], data);
-
-      return {
-        ...state,
-        location: {
-          name: locationName,
-          country,
-        },
-        currentWeather,
-        forecasts,
-      };
+      return state;
+    }
+    case `${FETCH_CURRENT_WEATHER}_FAIL`: {
+      console.log(action);
+      return state;
     }
     default: { return state; }
   }
