@@ -70,7 +70,7 @@ const Container = styled.View`
   width: 100%;
   height: 150px;
   padding: 10px;
-  background-color: green;
+  background-color: ${props => props.theme.opacityGray};
   border-radius: 10px;
   margin-bottom: 10px;
 `;
@@ -99,6 +99,7 @@ const Date = styled.Text`
   font-size: 20px;
   font-weight: 700;
   text-align: center;
+  color: ${props => props.theme.textLightGray};
 `;
 
 const WeatherSection = styled.View`
@@ -139,6 +140,7 @@ const InfoTextWrapper = styled.View`
 `;
 
 const InfoText = styled.Text`
+  color: ${props => props.theme.textLightGray};
 `;
 
 const TempContainer = styled.View`
@@ -156,7 +158,9 @@ const FeelsLikeContainer = styled.View`
   align-items: center;
 `;
 
-const FeelsLike = styled.Text``;
+const FeelsLike = styled.Text`
+  color: ${props => props.theme.textLightGray};
+`;
 
 const DiffSection = styled.View`
   flex-direction: row;
@@ -175,6 +179,8 @@ const DiffTempImage = styled.Image`
   height: 20px;
 `;
 
-const DiffTempText = styled.Text``;
+const DiffTempText = styled.Text`
+  color: ${props => props.theme.textLightGray};
+`;
 
 export default Forecast;

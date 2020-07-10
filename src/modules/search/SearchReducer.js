@@ -1,4 +1,4 @@
-import { FETCH_FORECAST } from './SearchActions';
+import { FETCH_FORECAST, CLEAR_FORECAST } from './SearchActions';
 import * as R from 'ramda';
 import moment from 'moment';
 
@@ -11,6 +11,12 @@ const initState = {
 
 const SearchReducer = (state = initState, action) => {
   switch (action.type) {
+    case CLEAR_FORECAST: {
+      return {
+        ...state,
+        forecasts: [],
+      }
+    } 
     case FETCH_FORECAST: {
       return R.assoc('isLoading', true, state);
     }

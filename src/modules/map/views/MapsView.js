@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { StatusBar, SafeAreaView } from 'react-native';
+import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import Bar from '@components/Bar';
@@ -20,6 +20,7 @@ type MapViewProps = {
 const MapsView = ({ navigation }: MapViewProps) => {
   const dispatch = useDispatch();
   const unitsType = useSelector(getUnitsType);
+  const [isMapReady, setMapReady] = useState(false);
   const marker = useRef(null);
   const [markerCoordinates, setMarkerCoordinates] = useState(null);
 
@@ -42,35 +43,43 @@ const MapsView = ({ navigation }: MapViewProps) => {
   };
 
   const handleCalloutPress = (locationName) => {
+    hideCallout();
     navigation.navigate('Search', {
       locationName,
       coordinates: markerCoordinates,
     });
-  }
+  };
+
+  const handleMapLayout = () => setMapReady(true);
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <Screen>
-          <Maps
-            onPress={hideCallout}
-            initialRegion={{
-              latitude: 49.0139,
-              longitude: 31.2858,
-              latitudeDelta: 20,
-              longitudeDelta: 9,
-            }}
-            onLongPress={(e) => handleLongMapPress(e.nativeEvent)}
-          >
-            {markerCoordinates && (
+          <MapsWrapper>
+            <MapView
+              style={{ ...StyleSheet.absoluteFillObject }}
+              onPress={hideCallout}
+              initialRegion={{
+                latitude: 49.0139,
+                longitude: 31.2858,
+                latitudeDelta: 20,
+                longitudeDelta: 9,
+              }}
+              onLongPress={(e) => handleLongMapPress(e.nativeEvent)}
+              onLayout={handleMapLayout}
+            >
+              {markerCoordinates && isMapReady && (
               <Marker
                 ref={marker}
                 coordinate={markerCoordinates}
               >
                 <MarkerCallout onCalloutPress={handleCalloutPress} />
-              </Marker>)}
-          </Maps>
+              </Marker>
+              )}
+            </MapView>
+          </MapsWrapper>
           <Bar
             navigation={navigation}
             dispatch={dispatch}
@@ -88,12 +97,11 @@ const Screen = styled.View`
   justify-content: center;
 `;
 
-const Maps = styled(MapView)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+const MapsWrapper = styled.View`
+  flex: 1;
+  width: 100%;
+  height: 93%;
+  position: relative;
 `;
 
 export default MapsView;

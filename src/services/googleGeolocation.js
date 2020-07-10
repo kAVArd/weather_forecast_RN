@@ -9,7 +9,6 @@ export default class GoogleGeolocation {
     const url = `${AppConfig.baseGoogleGeolocationURL}?&key=${GOOGLE_API_KEY}&latlng=${lat},${lng}`;
     const result = await axios.get(url);
 
-    console.log(JSON.stringify(result.data, null, 2));
     const locationString = R.path(['data', 'plus_code', 'compound_code'], result);
 
     if (locationString) {
@@ -21,7 +20,6 @@ export default class GoogleGeolocation {
         country: R.last(locationArray),
       }
     }
-    console.log(locationString);
 
     const formattedAddress = R.compose(
       R.prop('formatted_address'),

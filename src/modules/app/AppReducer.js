@@ -1,6 +1,6 @@
 import { path, assoc } from 'ramda';
 
-import { CHANGE_ACTIVE_TAB } from './AppActions';
+import { CHANGE_ACTIVE_TAB, SET_UNITS_TYPE } from './AppActions';
 
 export const STATE_KEY = 'app';
 
@@ -26,6 +26,11 @@ const AppReducer = (state = initState, action) => {
       const name = path(['payload', 'tabName'], action);
 
       return assoc('activeTab', name, state);
+    }
+    case SET_UNITS_TYPE: {
+      const type = path(['payload', 'type'], action);
+
+      return assoc('type', type, state);
     }
     default: {
       return state;

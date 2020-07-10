@@ -29,7 +29,6 @@ const MarkerCallout = ({ onCalloutPress }: MarkerCalloutProps) => {
           <Wrapper>
             <IconWrapper>
               <IconText>
-                {console.log(currentWeather.iconUrl)}
                 <Icon resizeMode="cover" source={{ uri: currentWeather.iconUrl }} />
               </IconText>
             </IconWrapper>
@@ -56,7 +55,7 @@ const MarkerCallout = ({ onCalloutPress }: MarkerCalloutProps) => {
 };
 
 const StyledCallout = styled(Callout)`
-  width: 250px;
+  width: 300px;
   height: 120px;
   align-self: flex-end;
 `;
@@ -65,7 +64,7 @@ const Wrapper = styled.View`
   flex-direction: row;
   flex: 1;
   padding: 10px;
-  background-color: green;
+  background-color: ${props => props.theme.opacityGray};
   border-radius: 20px;
 `;
 
@@ -110,7 +109,7 @@ const TempContainer = styled.View`
 
 const Temperature = styled.Text`
   font-size: 40px;
-  color: white;
+  color: ${props => props.theme.textLightGray};
   font-weight: 700;
 `;
 
@@ -118,17 +117,18 @@ const FeelsLikeContainer = styled.View`
   align-items: center;
 `;
 
-const FeelsLike = styled.Text``;
+const FeelsLike = styled.Text`
+  color: ${props => props.theme.textLightGray};
+`;
 
 const CalloutBody = styled.View`
   border-radius: 20px;
-  background-color: white;
-  border: 1px solid black;
   flex: 1;
 `;
 
 const LocationName = styled.Text`
-
+  color: ${props => props.theme.textLightGray};
+  font-weight: 700;
 `;
 
 export default MarkerCallout;
