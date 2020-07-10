@@ -17,17 +17,16 @@ const SearchReducer = (state = initState, action) => {
     case `${FETCH_FORECAST}_SUCCESS`: {
       const forecasts = R.path(['payload', 'data', 'daily'], action);
 
-      const filteredForecasts = forecasts.map(item => {
+      const filteredForecasts = forecasts.map((item, index) => {
         const icon = R.path(['weather', '0', 'icon'], item);
-        const iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
         const date = R.prop('dt', item);
 
         const formattedDate = moment.unix(date).format('DD.MM');
 
         return {
-          iconUrl,
-          date: formattedDate,
+          iconUrl: `http://openweathermap.org/img/wn/${icon}@2x.png`,
+          date: index === 0 ? 'Today' : formattedDate,
           temp: Math.round(R.path(['temp', 'day'], item)),
           minTemp: Math.round(R.path(['temp', 'min'], item)),
           maxTemp: Math.round(R.path(['temp', 'max'], item)),

@@ -1,12 +1,13 @@
 // @flow
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar, SafeAreaView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import Bar from '@components/Bar';
 import GoogleGeolocation from '@services/googleGeolocation';
+import { getUnitsType } from '@modules/app/AppReducer';
 
 import MarkerCallout from '../components/MarkerCallout';
 import { fetchCurrentWeather, setLocation } from '../MapActions';
@@ -18,6 +19,7 @@ type MapViewProps = {
 
 const MapsView = ({ navigation }: MapViewProps) => {
   const dispatch = useDispatch();
+  const unitsType = useSelector(getUnitsType);
   const marker = useRef(null);
   const [markerCoordinates, setMarkerCoordinates] = useState(null);
 
@@ -32,7 +34,7 @@ const MapsView = ({ navigation }: MapViewProps) => {
 
     const { latitude, longitude } = coordinate;
 
-    dispatch(fetchCurrentWeather(coordinate));
+    dispatch(fetchCurrentWeather(coordinate, unitsType));
 
     GoogleGeolocation.findLocationName(latitude, longitude).then(res => {
       dispatch(setLocation(res));
